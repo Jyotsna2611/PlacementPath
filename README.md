@@ -1,20 +1,60 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# 🎯 PlacementPath
+### Career Readiness & Skill Gap Analysis Platform
 
-# Run and deploy your AI Studio app
+<p align="center">
+  <b>Prepare Today. Get Placed Tomorrow!</b>
+</p>
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/0829d1d7-47a7-4269-8f9e-77319191b677
+## 🌐 Live Website
 
-## Run Locally
+🚀 **[Visit PlacementPath](https://jyotsna2611.github.io/PlacementPath/)**
 
-**Prerequisites:**  Node.js
+## 📌 About The Project
 
+PlacementPath is a web application designed to help B.Tech students prepare for campus placements by evaluating their skills and identifying areas for improvement.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+It helps students understand their career readiness through skill assessments, skill gap analysis, and personalized learning recommendations.
+
+## ✨ Key Features
+
+- 👨‍🎓 Student Skill Assessment
+- 💻 Technical Skill Evaluation
+- 🧠 Aptitude Assessment
+- 📊 Skill Gap Analysis
+- 📚 Personalized Learning Recommendations
+- 📈 Performance Tracking Dashboard
+
+## 🛠️ Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| HTML | Structure |
+| CSS | Styling |
+| JavaScript | Functionality |
+| React.js | User Interface |
+| Vite | Development & Build Tool |
+| Tailwind CSS | UI Styling |
+
+## 🎯 Project Objective
+
+To help students identify their strengths, improve their weaknesses, and become better prepared for campus placement opportunities.
+
+## 📸 Screenshots
+
+Screenshots coming soon!
+
+## 🚀 Live Demo
+
+[Click Here to Open PlacementPath](https://jyotsna2611.github.io/PlacementPath/)
+
+## 👩‍💻 Developer
+
+**Jyotsna**
+
+---
+
+<p align="center">
+  ⭐ If you like this project, don't forget to star the repository!
+</p>
