@@ -1,0 +1,6 @@
+{
+  "name": "PlacementPath — Explainable Placement Preparation Planner",
+  "description": "An explainable placement readiness and skill-gap analytics platform for B.Tech students with transparent benchmarks and dynamic preparation planners.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

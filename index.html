@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlacementPath — Explainable Placement Preparation Planner</title>
+  <meta name="description" content="An explainable placement readiness and skill-gap analytics platform for B.Tech students with transparent benchmarks and dynamic preparation planners.">
+  <meta property="og:title" content="PlacementPath — Explainable Placement Preparation Planner">
+  <meta property="og:description" content="An explainable placement readiness and skill-gap analytics platform for B.Tech students with transparent benchmarks and dynamic preparation planners.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-light">
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-container">
+          <div class="brand-icon">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="brand-details">
+            <span class="brand-title">PlacementPath</span>
+            <span class="brand-tagline">Explainable Prep Engine</span>
+          </div>
+        </div>
+        <button class="sidebar-close-btn mobile-sidebar-close" id="sidebar-close-btn" aria-label="Collapse Sidebar" title="Collapse Sidebar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Quick Student Capsule -->
+      <div class="sidebar-student-capsule">
+        <div class="capsule-avatar" id="sidebar-avatar">AS</div>
+        <div class="capsule-info">
+          <span class="capsule-name" id="sidebar-student-name">Aarav Sharma</span>
+          <span class="capsule-role" id="sidebar-target-role">Backend Developer</span>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Navigation</div>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <button class="nav-link active" data-view="dashboard">
+              <i class="fa-solid fa-chart-pie nav-icon"></i>
+              <span class="nav-label">Dashboard</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-view="profile">
+              <i class="fa-solid fa-id-badge nav-icon"></i>
+              <span class="nav-label">My Profile</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-view="assessments">
+              <i class="fa-solid fa-clipboard-check nav-icon"></i>
+              <span class="nav-label">Assessments</span>
+              <span class="nav-badge" id="nav-assess-badge">7 Topics</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-view="skillgap">
+              <i class="fa-solid fa-layer-group nav-icon"></i>
+              <span class="nav-label">Skill Gap Analysis</span>
+              <span class="nav-badge badge-warning" id="nav-gaps-badge">3 Gaps</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-view="planner">
+              <i class="fa-solid fa-calendar-days nav-icon"></i>
+              <span class="nav-label">Study Planner</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-view="roles">
+              <i class="fa-solid fa-briefcase nav-icon"></i>
+              <span class="nav-label">Job Roles</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-view="analytics">
+              <i class="fa-solid fa-chart-line nav-icon"></i>
+              <span class="nav-label">Analytics & Progress</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="nav-section-title">Methodology & Explainability</div>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <button class="nav-link" id="btn-show-methodology">
+              <i class="fa-solid fa-circle-nodes nav-icon"></i>
+              <span class="nav-label">Explainability Rules</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Sidebar Footer / Quick Reset -->
+      <div class="sidebar-footer">
+        <div class="demo-data-indicator">
+          <div class="demo-status-dot"></div>
+          <span>B.Tech Evaluation Demo</span>
+        </div>
+        <button class="btn-demo-switch" id="btn-quick-reset" title="Reset or load sample student profiles">
+          <i class="fa-solid fa-arrow-rotate-left"></i>
+          <span>Switch / Reset Demo Data</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Container -->
+    <div class="main-wrapper">
+      <!-- Top Bar -->
+      <header class="app-header">
+        <div class="header-left">
+          <button class="btn-icon mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="header-page-info">
+            <h1 class="header-title" id="page-heading">Student Placement Dashboard</h1>
+            <span class="header-subtitle" id="page-subheading">Explainable Readiness, Skill-Gap Matrix & Weekly Roadmap</span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- Active Target Role Selector -->
+          <div class="header-role-selector">
+            <span class="role-selector-label"><i class="fa-solid fa-crosshairs"></i> Target:</span>
+            <select id="header-role-select" class="header-select" aria-label="Select Target Role">
+              <option value="Backend Developer">Backend Developer</option>
+              <option value="Frontend Developer">Frontend Developer</option>
+              <option value="Full-Stack Developer">Full-Stack Developer</option>
+              <option value="Data Analyst">Data Analyst</option>
+              <option value="AI/ML Engineer">AI/ML Engineer</option>
+              <option value="Software Engineer">Software Engineer (General)</option>
+            </select>
+          </div>
+
+          <!-- Weekly Hours Counter -->
+          <div class="header-hours-badge" title="Target weekly preparation commitment">
+            <i class="fa-regular fa-clock"></i>
+            <span id="header-hours-val">14h / wk</span>
+          </div>
+
+          <!-- Notifications Button & Popover -->
+          <div class="notification-dropdown-wrapper">
+            <button class="btn-icon" id="btn-notifications" aria-label="View notifications">
+              <i class="fa-regular fa-bell"></i>
+              <span class="notification-badge" id="notif-count">3</span>
+            </button>
+            <div class="notification-panel" id="notification-panel">
+              <div class="notification-header">
+                <h3>Explainable System Insights</h3>
+                <span class="notif-meta">Rule-based recommendations</span>
+              </div>
+              <div class="notification-list" id="notification-list">
+                <!-- Injected via JavaScript -->
+              </div>
+              <div class="notification-footer">
+                <button class="btn-link" id="btn-clear-notifs">Clear all</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile Capsule Link -->
+          <button class="header-profile-btn" id="btn-quick-profile" aria-label="View Profile">
+            <div class="avatar-small" id="header-avatar">AS</div>
+            <span class="header-student-name" id="header-name">Aarav</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Body Content Area (Views) -->
+      <main class="content-body" id="main-content">
+
+        <!-- ==============================================
+             1. DASHBOARD VIEW
+             ============================================== -->
+        <section class="view-panel active" id="view-dashboard">
+          <!-- Hero Banner with Readiness Score -->
+          <div class="dashboard-hero-card">
+            <div class="hero-left">
+              <div class="hero-status-pill">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>B.Tech Campus Placement Evaluation — 2026 Batch</span>
+              </div>
+              <h2 class="hero-greeting">Welcome back, <span id="hero-student-name">Aarav</span>!</h2>
+              <p class="hero-description">
+                Your preparation profile is benchmarked against <strong id="hero-target-role">Backend Developer</strong> roles in product & high-growth engineering teams. Transparent calculations indicate your overall readiness status below.
+              </p>
+              <div class="hero-action-row">
+                <button class="btn-primary" data-view-target="assessments">
+                  <i class="fa-solid fa-play"></i> Take Skill Assessment
+                </button>
+                <button class="btn-secondary" data-view-target="planner">
+                  <i class="fa-regular fa-calendar-check"></i> View Study Plan
+                </button>
+                <button class="btn-ghost" id="btn-dashboard-explain-modal">
+                  <i class="fa-solid fa-circle-info"></i> How is Readiness Calculated?
+                </button>
+              </div>
+            </div>
+
+            <!-- Circular Readiness Meter -->
+            <div class="hero-readiness-meter">
+              <div class="readiness-gauge-container">
+                <svg class="readiness-svg" viewBox="0 0 160 160">
+                  <circle class="gauge-bg" cx="80" cy="80" r="68"></circle>
+                  <circle class="gauge-progress" id="gauge-progress-circle" cx="80" cy="80" r="68" stroke-dasharray="427.2" stroke-dashoffset="128"></circle>
+                </svg>
+                <div class="gauge-inner-content">
+                  <span class="gauge-score" id="hero-readiness-score">72</span>
+                  <span class="gauge-max">/ 100</span>
+                  <span class="gauge-status-label" id="hero-readiness-label">Good Progress</span>
+                </div>
+              </div>
+              <div class="readiness-meta-caption">
+                Overall Placement Readiness
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Core Pillars KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <div class="kpi-icon-box icon-tech">
+                  <i class="fa-solid fa-laptop-code"></i>
+                </div>
+                <span class="kpi-weight-badge">Weight: 35%</span>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-title">Technical Skills</span>
+                <div class="kpi-value-row">
+                  <span class="kpi-value" id="kpi-tech-score">75</span>
+                  <span class="kpi-target-indicator" id="kpi-tech-target">Req: 82</span>
+                </div>
+                <div class="kpi-progress-bar">
+                  <div class="kpi-progress-fill fill-tech" id="kpi-tech-fill" style="width: 75%;"></div>
+                </div>
+                <span class="kpi-subtext">DBMS, OS, Networks, Programming</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <div class="kpi-icon-box icon-dsa">
+                  <i class="fa-solid fa-brain"></i>
+                </div>
+                <span class="kpi-weight-badge">Weight: 30%</span>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-title">Problem Solving & DSA</span>
+                <div class="kpi-value-row">
+                  <span class="kpi-value" id="kpi-dsa-score">68</span>
+                  <span class="kpi-target-indicator" id="kpi-dsa-target">Req: 80</span>
+                </div>
+                <div class="kpi-progress-bar">
+                  <div class="kpi-progress-fill fill-dsa" id="kpi-dsa-fill" style="width: 68%;"></div>
+                </div>
+                <span class="kpi-subtext">Data Structures & Online Coding Round (OA)</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <div class="kpi-icon-box icon-aptitude">
+                  <i class="fa-solid fa-calculator"></i>
+                </div>
+                <span class="kpi-weight-badge">Weight: 20%</span>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-title">Quantitative & Logic</span>
+                <div class="kpi-value-row">
+                  <span class="kpi-value" id="kpi-apt-score">74</span>
+                  <span class="kpi-target-indicator" id="kpi-apt-target">Req: 70</span>
+                </div>
+                <div class="kpi-progress-bar">
+                  <div class="kpi-progress-fill fill-apt" id="kpi-apt-fill" style="width: 74%;"></div>
+                </div>
+                <span class="kpi-subtext">Quant, Logical & Analytical Reasoning</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <div class="kpi-icon-box icon-comm">
+                  <i class="fa-solid fa-comments"></i>
+                </div>
+                <span class="kpi-weight-badge">Weight: 15%</span>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-title">Communication & HR</span>
+                <div class="kpi-value-row">
+                  <span class="kpi-value" id="kpi-comm-score">82</span>
+                  <span class="kpi-target-indicator" id="kpi-comm-target">Req: 75</span>
+                </div>
+                <div class="kpi-progress-bar">
+                  <div class="kpi-progress-fill fill-comm" id="kpi-comm-fill" style="width: 82%;"></div>
+                </div>
+                <span class="kpi-subtext">STAR Method, Technical Articulation</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle Split: Radar Chart & Weekly Prep Progress -->
+          <div class="dashboard-split-grid">
+            <!-- Chart Card: Radar Comparison -->
+            <div class="content-card">
+              <div class="card-header-row">
+                <div>
+                  <h3 class="card-title">Role Competency Alignment</h3>
+                  <span class="card-subtitle">Current proficiency vs target benchmark for <span id="radar-role-title">Backend Developer</span></span>
+                </div>
+                <button class="btn-sm btn-ghost" data-view-target="skillgap">
+                  Full Gap Breakdown <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+              <div class="radar-chart-container">
+                <canvas id="dashboardRadarChart"></canvas>
+              </div>
+              <div class="chart-legend-custom">
+                <div class="legend-item"><span class="legend-dot dot-current"></span> Current Student Rating</div>
+                <div class="legend-item"><span class="legend-dot dot-benchmark"></span> Required Hiring Benchmark</div>
+              </div>
+            </div>
+
+            <!-- Weekly Preparation Tracker & Next Steps -->
+            <div class="content-card">
+              <div class="card-header-row">
+                <div>
+                  <h3 class="card-title">Weekly Preparation Progress</h3>
+                  <span class="card-subtitle">Week 3 of planned placement timeline</span>
+                </div>
+                <button class="btn-sm btn-primary-outline" data-view-target="planner">
+                  Open Planner
+                </button>
+              </div>
+
+              <!-- Hours progress -->
+              <div class="weekly-progress-summary">
+                <div class="progress-stats-row">
+                  <div>
+                    <span class="stat-highlight" id="dashboard-hours-completed">9.5</span>
+                    <span class="stat-muted">/ <span id="dashboard-hours-target">14.0</span> hours logged</span>
+                  </div>
+                  <span class="badge-accent" id="dashboard-plan-pct">68% Done</span>
+                </div>
+                <div class="linear-progress-bar">
+                  <div class="linear-progress-fill" id="dashboard-hours-fill" style="width: 68%;"></div>
+                </div>
+              </div>
+
+              <!-- Recommended Next Steps (Actionable) -->
+              <div class="section-micro-title">Prioritized Next Steps (Explainable AI Engine)</div>
+              <div class="dashboard-tasks-list" id="dashboard-recommendations-list">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Split: Skill-Gap Heatmap & Recent Assessments -->
+          <div class="dashboard-split-grid bottom-grid">
+            <!-- Skill-Gap Heatmap Matrix -->
+            <div class="content-card">
+              <div class="card-header-row">
+                <div>
+                  <h3 class="card-title">Skill-Gap Heatmap Matrix</h3>
+                  <span class="card-subtitle">Transparent point gap vs role benchmark targets</span>
+                </div>
+                <span class="data-indicator-pill"><i class="fa-solid fa-database"></i> Live Profile State</span>
+              </div>
+
+              <div class="heatmap-table-wrapper">
+                <table class="data-table" id="heatmap-table">
+                  <thead>
+                    <tr>
+                      <th>Competency Area</th>
+                      <th>Current</th>
+                      <th>Benchmark</th>
+                      <th>Gap</th>
+                      <th>Priority</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="heatmap-table-body">
+                    <!-- Populated by script.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Recent Assessment History -->
+            <div class="content-card">
+              <div class="card-header-row">
+                <div>
+                  <h3 class="card-title">Recent Assessment History</h3>
+                  <span class="card-subtitle">Validated test submissions & score impact</span>
+                </div>
+                <button class="btn-sm btn-secondary" data-view-target="assessments">
+                  Take New Quiz
+                </button>
+              </div>
+
+              <div class="recent-assess-list" id="dashboard-assess-list">
+                <!-- Populated by script.js -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==============================================
+             2. STUDENT PROFILE VIEW
+             ============================================== -->
+        <section class="view-panel" id="view-profile">
+          <div class="content-card max-width-container">
+            <div class="card-header-row">
+              <div>
+                <h2 class="card-title">Student Profile & Competency Calibration</h2>
+                <span class="card-subtitle">Enter your academic details, target career role, and self-assessed skill levels.</span>
+              </div>
+              <div class="header-btn-group">
+                <button class="btn-sm btn-ghost" id="btn-load-sample-aarav">
+                  <i class="fa-solid fa-user-check"></i> Load Demo: Aarav (CSE)
+                </button>
+                <button class="btn-sm btn-ghost" id="btn-load-sample-priya">
+                  <i class="fa-solid fa-user-check"></i> Load Demo: Priya (IT)
+                </button>
+              </div>
+            </div>
+
+            <form id="profile-form" class="profile-form-grid">
+              <!-- Basic Academic Info -->
+              <div class="form-section">
+                <h3 class="form-section-title"><i class="fa-solid fa-user-graduate"></i> Academic Information</h3>
+
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="prof-name">Full Name <span class="req">*</span></label>
+                    <input type="text" id="prof-name" class="form-input" required placeholder="e.g. Aarav Sharma">
+                  </div>
+                  <div class="form-group">
+                    <label for="prof-branch">B.Tech Engineering Branch <span class="req">*</span></label>
+                    <select id="prof-branch" class="form-input" required>
+                      <option value="Computer Science & Engineering">Computer Science & Engineering (CSE)</option>
+                      <option value="Information Technology">Information Technology (IT)</option>
+                      <option value="Electronics & Communication">Electronics & Communication (ECE)</option>
+                      <option value="Electrical & Electronics">Electrical & Electronics (EEE)</option>
+                      <option value="Mechanical / Other">Mechanical / Other Branches</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="prof-year">Current Year of Study <span class="req">*</span></label>
+                    <select id="prof-year" class="form-input" required>
+                      <option value="3rd Year (Pre-Final)">3rd Year (Pre-Final Year — Placement Prep Phase)</option>
+                      <option value="4th Year (Final)">4th Year (Final Year — Active Drive Phase)</option>
+                      <option value="2nd Year (Sophomore)">2nd Year (Foundational Prep Phase)</option>
+                      <option value="1st Year (Freshman)">1st Year (Exploratory Phase)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="prof-target-role">Target Placement Role <span class="req">*</span></label>
+                    <select id="prof-target-role" class="form-input" required>
+                      <option value="Backend Developer">Backend Developer</option>
+                      <option value="Frontend Developer">Frontend Developer</option>
+                      <option value="Full-Stack Developer">Full-Stack Developer</option>
+                      <option value="Data Analyst">Data Analyst</option>
+                      <option value="AI/ML Engineer">AI/ML Engineer</option>
+                      <option value="Software Engineer">Software Engineer (General SDE)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="prof-company-tier">Target Company Category</label>
+                    <select id="prof-company-tier" class="form-input">
+                      <option value="Product Companies (Tier 1)">Product Companies (Tier 1 - FAANG / High Growth)</option>
+                      <option value="FinTech & Quantitative">FinTech & Quantitative Firms</option>
+                      <option value="High-Growth Tech Startups">High-Growth Tech Startups</option>
+                      <option value="IT Services & Global Capability Centers">IT Services & Global Capability Centers (GCCs)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="prof-hours">Available Preparation Hours / Week: <strong id="lbl-hours">14</strong> hrs</label>
+                    <input type="range" id="prof-hours" min="4" max="35" step="1" value="14" class="slider-input">
+                    <div class="slider-ticks">
+                      <span>4h (Light)</span>
+                      <span>15h (Balanced)</span>
+                      <span>35h (Intensive)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Self-Assessed Skill Baseline -->
+              <div class="form-section">
+                <div class="section-title-with-note">
+                  <h3 class="form-section-title"><i class="fa-solid fa-sliders"></i> Baseline Self-Assessment (0 to 100)</h3>
+                  <span class="note-text">Self-ratings provide a starting baseline until you take standardized module assessments.</span>
+                </div>
+
+                <div class="skills-slider-grid">
+                  <div class="slider-box">
+                    <div class="slider-label-row">
+                      <span class="slider-title">Data Structures & Algorithms</span>
+                      <span class="slider-val-badge" id="lbl-skill-dsa">68</span>
+                    </div>
+                    <input type="range" id="prof-skill-dsa" min="10" max="100" value="68" class="slider-input skill-slider" data-skill="dsa">
+                  </div>
+
+                  <div class="slider-box">
+                    <div class="slider-label-row">
+                      <span class="slider-title">Database Management & SQL</span>
+                      <span class="slider-val-badge" id="lbl-skill-dbms">60</span>
+                    </div>
+                    <input type="range" id="prof-skill-dbms" min="10" max="100" value="60" class="slider-input skill-slider" data-skill="dbms">
+                  </div>
+
+                  <div class="slider-box">
+                    <div class="slider-label-row">
+                      <span class="slider-title">Operating Systems Concepts</span>
+                      <span class="slider-val-badge" id="lbl-skill-os">70</span>
+                    </div>
+                    <input type="range" id="prof-skill-os" min="10" max="100" value="70" class="slider-input skill-slider" data-skill="os">
+                  </div>
+
+                  <div class="slider-box">
+                    <div class="slider-label-row">
+                      <span class="slider-title">Computer Networks & Web Protocols</span>
+                      <span class="slider-val-badge" id="lbl-skill-cn">65</span>
+                    </div>
+                    <input type="range" id="prof-skill-cn" min="10" max="100" value="65" class="slider-input skill-slider" data-skill="cn">
+                  </div>
+
+                  <div class="slider-box">
+                    <div class="slider-label-row">
+                      <span class="slider-title">Quantitative Aptitude & Logic</span>
+                      <span class="slider-val-badge" id="lbl-skill-apt">72</span>
+                    </div>
+                    <input type="range" id="prof-skill-apt" min="10" max="100" value="72" class="slider-input skill-slider" data-skill="aptitude">
+                  </div>
+
+                  <div class="slider-box">
+                    <div class="slider-label-row">
+                      <span class="slider-title">Communication & Behavioral</span>
+                      <span class="slider-val-badge" id="lbl-skill-comm">80</span>
+                    </div>
+                    <input type="range" id="prof-skill-comm" min="10" max="100" value="80" class="slider-input skill-slider" data-skill="communication">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Buttons -->
+              <div class="form-actions-bar">
+                <button type="submit" class="btn-primary">
+                  <i class="fa-solid fa-floppy-disk"></i> Save Profile & Update Benchmarks
+                </button>
+                <button type="button" class="btn-secondary" id="btn-reset-profile">
+                  <i class="fa-solid fa-rotate"></i> Reset to Default
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+
+        <!-- ==============================================
+             3. ASSESSMENTS VIEW
+             ============================================== -->
+        <section class="view-panel" id="view-assessments">
+          <!-- Topic Catalog Screen -->
+          <div id="assess-catalog-screen">
+            <div class="content-card">
+              <div class="card-header-row">
+                <div>
+                  <h2 class="card-title">Placement Readiness Assessments</h2>
+                  <span class="card-subtitle">Take standardized multiple-choice tests designed around real B.Tech campus recruitment rounds.</span>
+                </div>
+                <div class="catalog-filters">
+                  <button class="pill-filter active" data-filter="all">All Topics</button>
+                  <button class="pill-filter" data-filter="tech">Technical & Core CS</button>
+                  <button class="pill-filter" data-filter="aptitude">Aptitude & Comm</button>
+                </div>
+              </div>
+
+              <div class="assessment-grid" id="assessment-cards-grid">
+                <!-- Rendered dynamically by script.js -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Quiz Screen (Hidden by default) -->
+          <div id="assess-active-quiz-screen" class="hidden">
+            <div class="content-card quiz-card-wrapper">
+              <!-- Quiz Header Bar -->
+              <div class="quiz-top-bar">
+                <div class="quiz-meta-info">
+                  <button class="btn-sm btn-ghost" id="btn-quiz-exit">
+                    <i class="fa-solid fa-arrow-left"></i> Exit Quiz
+                  </button>
+                  <div class="quiz-title-box">
+                    <h3 class="quiz-active-title" id="active-quiz-title">Data Structures & Algorithms</h3>
+                    <span class="quiz-active-category" id="active-quiz-category">Technical Assessment</span>
+                  </div>
+                </div>
+
+                <div class="quiz-status-indicators">
+                  <div class="quiz-timer-box" id="quiz-timer-container">
+                    <i class="fa-regular fa-clock"></i>
+                    <span id="quiz-timer-text">10:00</span>
+                  </div>
+                  <div class="quiz-progress-pill">
+                    Question <span id="quiz-current-num">1</span> of <span id="quiz-total-num">5</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Question Content Area -->
+              <div class="quiz-question-box">
+                <div class="question-header-row">
+                  <span class="q-difficulty-badge" id="q-difficulty">Medium</span>
+                  <span class="q-topic-tag" id="q-subtopic">Binary Trees</span>
+                </div>
+                <h4 class="question-text" id="q-text">What is the worst-case time complexity of searching in a standard Binary Search Tree?</h4>
+
+                <!-- Optional Code block if present -->
+                <pre class="quiz-code-block hidden" id="q-code"><code id="q-code-content"></code></pre>
+
+                <!-- Options List -->
+                <div class="quiz-options-list" id="q-options-container">
+                  <!-- Populated by script.js -->
+                </div>
+
+                <!-- Explanation Container (Shows after answering) -->
+                <div class="quiz-explanation-box hidden" id="q-explanation-box">
+                  <div class="explanation-title"><i class="fa-solid fa-lightbulb"></i> Explainable Answer Analysis:</div>
+                  <p class="explanation-body" id="q-explanation-text"></p>
+                </div>
+              </div>
+
+              <!-- Quiz Navigation Footer -->
+              <div class="quiz-bottom-bar">
+                <button class="btn-secondary" id="btn-quiz-prev" disabled>
+                  <i class="fa-solid fa-chevron-left"></i> Previous
+                </button>
+                <div class="quiz-center-indicator" id="quiz-indicator-dots">
+                  <!-- Question dots injected here -->
+                </div>
+                <button class="btn-primary" id="btn-quiz-next">
+                  Next <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quiz Results Modal / Overlay -->
+          <div id="quiz-results-screen" class="hidden">
+            <div class="content-card results-card-wrapper">
+              <div class="results-header-banner">
+                <div class="results-icon-celebrate" id="results-icon">
+                  <i class="fa-solid fa-award"></i>
+                </div>
+                <h2 class="results-title" id="results-title">Assessment Completed!</h2>
+                <span class="results-subtitle" id="results-topic-name">Data Structures & Algorithms</span>
+              </div>
+
+              <div class="results-stats-row">
+                <div class="result-stat-card">
+                  <span class="res-stat-val" id="res-score-pct">80%</span>
+                  <span class="res-stat-lbl">Final Score</span>
+                </div>
+                <div class="result-stat-card">
+                  <span class="res-stat-val text-success" id="res-correct-count">4</span>
+                  <span class="res-stat-lbl">Correct</span>
+                </div>
+                <div class="result-stat-card">
+                  <span class="res-stat-val text-danger" id="res-wrong-count">1</span>
+                  <span class="res-stat-lbl">Incorrect</span>
+                </div>
+                <div class="result-stat-card">
+                  <span class="res-stat-val text-accent" id="res-impact-val">+12 pts</span>
+                  <span class="res-stat-lbl">Skill Impact</span>
+                </div>
+              </div>
+
+              <!-- Explainable Impact Rationale -->
+              <div class="explainable-callout">
+                <div class="callout-header"><i class="fa-solid fa-chart-simple"></i> Explainable Score Integration:</div>
+                <p id="res-explain-text">
+                  Your validated score of <strong>80%</strong> was combined with your prior rating via the transparent formula: <br>
+                  <code>New Rating = (0.70 × Assessment) + (0.30 × Prior Baseline)</code>.
+                  Your calibrated DSA rating is now updated to <strong>76/100</strong>, narrowing your role gap by <strong>8 points</strong>.
+                </p>
+              </div>
+
+              <!-- Question Review Accordion -->
+              <div class="results-review-section">
+                <h4 class="review-title">Detailed Question-by-Question Review</h4>
+                <div class="review-questions-list" id="results-review-list">
+                  <!-- Populated by script.js -->
+                </div>
+              </div>
+
+              <div class="results-action-row">
+                <button class="btn-primary" id="btn-results-to-gap">
+                  <i class="fa-solid fa-layer-group"></i> View Updated Skill Gap
+                </button>
+                <button class="btn-secondary" id="btn-results-to-planner">
+                  <i class="fa-regular fa-calendar-check"></i> Update Study Plan
+                </button>
+                <button class="btn-ghost" id="btn-results-back-catalog">
+                  Back to All Assessments
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==============================================
+             4. SKILL GAP ANALYSIS VIEW
+             ============================================== -->
+        <section class="view-panel" id="view-skillgap">
+          <!-- Benchmark Role Header -->
+          <div class="content-card gap-summary-banner">
+            <div class="banner-content">
+              <div class="banner-badge">Role Target Benchmark</div>
+              <h2 class="banner-role-name" id="gap-role-heading">Backend Developer Skill Benchmarks</h2>
+              <p class="banner-desc">
+                Rule-based explainable comparison between your verified competency and industry hiring benchmarks for product & tech firms.
+              </p>
+            </div>
+            <div class="banner-kpis">
+              <div class="banner-kpi-item">
+                <span class="kpi-num text-danger" id="gap-critical-count">2</span>
+                <span class="kpi-tag">Critical Gaps (≥ 20)</span>
+              </div>
+              <div class="banner-kpi-item">
+                <span class="kpi-num text-warning" id="gap-moderate-count">2</span>
+                <span class="kpi-tag">Moderate Gaps (10-19)</span>
+              </div>
+              <div class="banner-kpi-item">
+                <span class="kpi-num text-success" id="gap-met-count">3</span>
+                <span class="kpi-tag">Target Met (≤ 9)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formula Card: How Gaps & Priorities are Calculated -->
+          <div class="content-card calculation-explainer-card">
+            <div class="explainer-toggle-row" id="toggle-formula-details">
+              <div class="explainer-left">
+                <i class="fa-solid fa-calculator explainer-icon"></i>
+                <div>
+                  <h4 class="explainer-title">Transparent Explainability Formula (Rule-Based)</h4>
+                  <span class="explainer-sub">Click to expand mathematical weighting, gap calculation & priority rules.</span>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-down explainer-arrow" id="formula-chevron"></i>
+            </div>
+
+            <div class="formula-details-collapsible" id="formula-details-box">
+              <div class="formula-grid">
+                <div class="formula-item">
+                  <span class="formula-step">Step 1: Calibrated Skill Rating</span>
+                  <div class="formula-code">Proficiency = (Assessment × 0.70) + (Self-Rating × 0.30)</div>
+                  <p class="formula-desc">Objective test answers carry 70% weight, while student self-baseline provides 30% initial grounding until multiple quizzes are recorded.</p>
+                </div>
+                <div class="formula-item">
+                  <span class="formula-step">Step 2: Point Gap Calculation</span>
+                  <div class="formula-code">Skill Gap = max(0, Target Benchmark - Current Proficiency)</div>
+                  <p class="formula-desc">A positive gap indicates deficient points required to reach competitive parity with campus placement candidates.</p>
+                </div>
+                <div class="formula-item">
+                  <span class="formula-step">Step 3: Priority Classification</span>
+                  <div class="formula-code">Critical (Gap ≥ 20) · Moderate (10–19) · Low (1–9) · Met (≤ 0)</div>
+                  <p class="formula-desc">Critical gaps automatically trigger high-priority study planner blocks and recommended remediation quizzes.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Bar -->
+          <div class="gap-filter-bar">
+            <span class="filter-label">Filter Competencies:</span>
+            <div class="filter-btn-group">
+              <button class="gap-filter-btn active" data-gap-filter="all">All Skills (<span id="count-all-skills">7</span>)</button>
+              <button class="gap-filter-btn" data-gap-filter="critical">Critical Priority (<span id="count-crit-skills">2</span>)</button>
+              <button class="gap-filter-btn" data-gap-filter="moderate">Moderate Priority (<span id="count-mod-skills">2</span>)</button>
+              <button class="gap-filter-btn" data-gap-filter="met">Target Met (<span id="count-met-skills">3</span>)</button>
+            </div>
+          </div>
+
+          <!-- Cards Grid for Each Skill -->
+          <div class="skill-gap-cards-grid" id="skill-gap-cards-container">
+            <!-- Populated dynamically by script.js -->
+          </div>
+
+          <!-- Visual Gap Chart -->
+          <div class="content-card chart-card-spacer">
+            <div class="card-header-row">
+              <div>
+                <h3 class="card-title">Comparative Gap Distribution</h3>
+                <span class="card-subtitle">Visual point discrepancy across each placement domain</span>
+              </div>
+            </div>
+            <div class="bar-chart-container">
+              <canvas id="skillGapBarChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==============================================
+             5. STUDY PLANNER VIEW
+             ============================================== -->
+        <section class="view-panel" id="view-planner">
+          <!-- Planner Header Banner -->
+          <div class="content-card planner-hero-card">
+            <div class="planner-hero-info">
+              <div class="hero-status-pill">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Weekly Preparation Roadmap</span>
+              </div>
+              <h2 class="card-title">Dynamic Study Schedule</h2>
+              <p class="card-subtitle">
+                Generated from your active <strong><span id="plan-role-label">Backend Developer</span></strong> gaps and your configured commitment of <strong><span id="plan-hours-label">14</span> hours / week</strong>.
+              </p>
+            </div>
+
+            <div class="planner-actions-right">
+              <button class="btn-primary" id="btn-regenerate-plan">
+                <i class="fa-solid fa-arrows-rotate"></i> Regenerate Weekly Plan
+              </button>
+              <button class="btn-secondary" id="btn-add-custom-task">
+                <i class="fa-solid fa-plus"></i> Add Custom Task
+              </button>
+            </div>
+          </div>
+
+          <!-- Weekdays Tabs (Mon to Sun) + Overview -->
+          <div class="planner-schedule-layout">
+            <!-- Left Column: Days & Tasks -->
+            <div class="planner-tasks-column">
+              <!-- Day Tabs -->
+              <div class="day-tabs-scroll" id="day-tabs-container">
+                <button class="day-tab active" data-day="Mon">Mon <span class="tab-dot"></span></button>
+                <button class="day-tab" data-day="Tue">Tue <span class="tab-dot"></span></button>
+                <button class="day-tab" data-day="Wed">Wed <span class="tab-dot"></span></button>
+                <button class="day-tab" data-day="Thu">Thu <span class="tab-dot"></span></button>
+                <button class="day-tab" data-day="Fri">Fri <span class="tab-dot"></span></button>
+                <button class="day-tab" data-day="Sat">Sat <span class="tab-dot"></span></button>
+                <button class="day-tab" data-day="Sun">Sun <span class="tab-dot"></span></button>
+              </div>
+
+              <!-- Day Content Container -->
+              <div class="content-card day-tasks-card">
+                <div class="day-card-header">
+                  <div>
+                    <h3 class="day-card-title" id="day-view-title">Monday Tasks</h3>
+                    <span class="day-card-sub" id="day-view-sub">Focus: Critical DSA & Core System Design</span>
+                  </div>
+                  <div class="day-completion-tag" id="day-completion-summary">
+                    0 of 3 Completed
+                  </div>
+                </div>
+
+                <div class="tasks-checklist" id="day-tasks-container">
+                  <!-- Populated by script.js -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Weekly Breakdown & Donut Chart -->
+            <div class="planner-summary-column">
+              <div class="content-card">
+                <h3 class="card-title">Study Time Allocation</h3>
+                <span class="card-subtitle">Hours divided by placement subject</span>
+                <div class="donut-chart-container">
+                  <canvas id="plannerDonutChart"></canvas>
+                </div>
+                <div class="time-breakdown-list" id="planner-breakdown-list">
+                  <!-- Populated by script.js -->
+                </div>
+              </div>
+
+              <!-- Planner Explainability Card -->
+              <div class="content-card tip-card">
+                <div class="tip-header">
+                  <i class="fa-solid fa-bullhorn text-accent"></i>
+                  <h4>Planner Generation Logic</h4>
+                </div>
+                <p class="tip-text">
+                  The study planner prioritizes skills with the highest gap scores first (60% allocation), followed by core subject revision (25%), and timed aptitude/mock interviews (15%). Completing tasks updates your progress in real-time.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==============================================
+             6. JOB ROLE EXPLORER VIEW
+             ============================================== -->
+        <section class="view-panel" id="view-roles">
+          <div class="content-card roles-intro-card">
+            <div>
+              <h2 class="card-title">Campus Job Roles Explorer</h2>
+              <p class="card-subtitle">
+                Explore standardized B.Tech placement profiles, required competency targets, and typical interview rounds. Switch target roles to recalculate your skill gap analysis and tailored preparation schedule.
+              </p>
+            </div>
+            <div class="role-disclaimer-pill">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>Illustrative hiring profiles based on 2026 campus recruitment data</span>
+            </div>
+          </div>
+
+          <div class="roles-cards-grid" id="roles-cards-container">
+            <!-- Populated dynamically by script.js -->
+          </div>
+        </section>
+
+
+        <!-- ==============================================
+             7. ANALYTICS & PROGRESS VIEW
+             ============================================== -->
+        <section class="view-panel" id="view-analytics">
+          <!-- Top Row Charts -->
+          <div class="dashboard-split-grid">
+            <!-- Line Chart: Readiness Over Time -->
+            <div class="content-card">
+              <div class="card-header-row">
+                <div>
+                  <h3 class="card-title">Readiness & Score Progression</h3>
+                  <span class="card-subtitle">Chronological score trajectory across mock tests</span>
+                </div>
+                <span class="pill-info">6-Week Timeline</span>
+              </div>
+              <div class="line-chart-container">
+                <canvas id="progressLineChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Subject Competency Improvement Metrics -->
+            <div class="content-card">
+              <div class="card-header-row">
+                <div>
+                  <h3 class="card-title">Weakest vs Strongest Areas</h3>
+                  <span class="card-subtitle">Immediate intervention and maintenance areas</span>
+                </div>
+              </div>
+              <div class="strength-weakness-grid" id="strengths-weakness-container">
+                <!-- Injected via script.js -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Comprehensive Assessment History Ledger -->
+          <div class="content-card chart-card-spacer">
+            <div class="card-header-row">
+              <div>
+                <h3 class="card-title">Complete Assessment Ledger</h3>
+                <span class="card-subtitle">Every assessment session logged with timestamp, score, and skill impact</span>
+              </div>
+              <div class="table-search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="ledger-search-input" placeholder="Search by topic..." class="table-search-input">
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table" id="analytics-ledger-table">
+                <thead>
+                  <tr>
+                    <th>Date & Time</th>
+                    <th>Assessment Domain</th>
+                    <th>Questions</th>
+                    <th>Score</th>
+                    <th>Percentage</th>
+                    <th>Skill Impact</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="analytics-ledger-tbody">
+                  <!-- Populated by script.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       MODALS & OVERLAYS
+       ============================================== -->
+
+  <!-- Explainability Modal -->
+  <div class="modal-backdrop hidden" id="modal-methodology">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-box">
+          <i class="fa-solid fa-circle-nodes modal-icon"></i>
+          <div>
+            <h3 class="modal-title">PlacementPath Explainability Framework</h3>
+            <span class="modal-subtitle">Transparent mathematical model for student readiness scoring</span>
+          </div>
+        </div>
+        <button class="btn-icon modal-close" id="modal-close-methodology" aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-intro">
+          Unlike opaque black-box AI systems, <strong>PlacementPath</strong> operates on transparent, explainable, rule-based algorithms. Every recommendation, gap score, and readiness percentage can be traced directly to clear mathematical formulas:
+        </p>
+
+        <div class="methodology-card">
+          <h4>1. Overall Placement Readiness Index (0 to 100)</h4>
+          <div class="math-box">
+            Readiness = (Technical × 0.35) + (DSA × 0.30) + (Aptitude × 0.20) + (Communication × 0.15)
+          </div>
+          <p class="math-explanation">
+            Derived from hiring round weightings in campus placement drives. Technical and DSA rounds filter over 70% of candidates during initial online tests (OA) and technical rounds.
+          </p>
+        </div>
+
+        <div class="methodology-card">
+          <h4>2. Calibrated Skill Rating</h4>
+          <div class="math-box">
+            Proficiency = (Assessment Score × 0.70) + (Self-Assessed Baseline × 0.30)
+          </div>
+          <p class="math-explanation">
+            When you complete an assessment, objective evaluation receives 70% weight, correcting any over- or under-confidence in self-reporting.
+          </p>
+        </div>
+
+        <div class="methodology-card">
+          <h4>3. Skill Gap & Priority Matrix</h4>
+          <div class="math-box">
+            Gap = max(0, Role Target Benchmark - Current Proficiency)
+          </div>
+          <ul class="priority-rules-list">
+            <li><strong class="text-danger">Critical Gap (≥ 20 pts):</strong> Immediate placement bottleneck. Must be addressed before scheduling campus interviews.</li>
+            <li><strong class="text-warning">Moderate Gap (10–19 pts):</strong> Important competency requiring 4–6 hours of targeted practice.</li>
+            <li><strong class="text-success">Target Met (≤ 9 pts):</strong> Candidate meets or exceeds the industry baseline for entry-level hiring.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-primary" id="btn-close-methodology-ok">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Custom Task Modal -->
+  <div class="modal-backdrop hidden" id="modal-custom-task">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-box">
+          <i class="fa-solid fa-plus modal-icon"></i>
+          <div>
+            <h3 class="modal-title">Add Custom Preparation Task</h3>
+            <span class="modal-subtitle">Add your personal college assignment or project task to the planner</span>
+          </div>
+        </div>
+        <button class="btn-icon modal-close" id="modal-close-task" aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="form-custom-task">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="task-input-title">Task Title <span class="req">*</span></label>
+            <input type="text" id="task-input-title" class="form-input" required placeholder="e.g. Solve 3 LeetCode Graph problems">
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="task-input-day">Scheduled Day</label>
+              <select id="task-input-day" class="form-input">
+                <option value="Mon">Monday</option>
+                <option value="Tue">Tuesday</option>
+                <option value="Wed">Wednesday</option>
+                <option value="Thu">Thursday</option>
+                <option value="Fri">Friday</option>
+                <option value="Sat">Saturday</option>
+                <option value="Sun">Sunday</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="task-input-category">Skill Category</label>
+              <select id="task-input-category" class="form-input">
+                <option value="Data Structures & Algorithms">Data Structures & Algorithms</option>
+                <option value="Database Management (DBMS)">Database Management (DBMS)</option>
+                <option value="Operating Systems & Networks">Operating Systems & Networks</option>
+                <option value="Programming Fundamentals">Programming Fundamentals</option>
+                <option value="Quantitative Aptitude">Quantitative Aptitude</option>
+                <option value="Communication & HR">Communication & HR</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="task-input-duration">Estimated Duration (mins)</label>
+              <input type="number" id="task-input-duration" class="form-input" min="15" max="300" step="15" value="60">
+            </div>
+            <div class="form-group">
+              <label for="task-input-priority">Priority</label>
+              <select id="task-input-priority" class="form-input">
+                <option value="High">High Priority</option>
+                <option value="Medium" selected>Medium Priority</option>
+                <option value="Normal">Normal</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="btn-cancel-task">Cancel</button>
+          <button type="submit" class="btn-primary">Add to Schedule</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reset / Profile Switch Confirmation Modal -->
+  <div class="modal-backdrop hidden" id="modal-reset-data">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-box">
+          <i class="fa-solid fa-triangle-exclamation modal-icon text-warning"></i>
+          <div>
+            <h3 class="modal-title">Switch or Reset Demo Profile</h3>
+            <span class="modal-subtitle">Load pre-configured demo student data or reset to blank state</span>
+          </div>
+        </div>
+        <button class="btn-icon modal-close" id="modal-close-reset" aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p>Select an option to test PlacementPath with different student profiles and academic situations:</p>
+
+        <div class="demo-select-options">
+          <button class="demo-option-card" id="btn-confirm-aarav">
+            <div class="demo-option-header">
+              <strong>Aarav Sharma — 3rd Year CSE</strong>
+              <span class="badge-accent">Recommended</span>
+            </div>
+            <p>Target: Backend Developer. Has taken 4 assessments. Has critical gaps in DBMS and System Design. Active study plan.</p>
+          </button>
+
+          <button class="demo-option-card" id="btn-confirm-priya">
+            <div class="demo-option-header">
+              <strong>Priya Patel — 4th Year IT</strong>
+              <span class="badge-success">High Readiness</span>
+            </div>
+            <p>Target: Full-Stack Developer. Has high DSA and Communication scores. Minor gap in Computer Networks.</p>
+          </button>
+
+          <button class="demo-option-card" id="btn-confirm-blank">
+            <div class="demo-option-header">
+              <strong>Fresh Blank Profile</strong>
+              <span class="badge-neutral">Empty State</span>
+            </div>
+            <p>Reset all localStorage data. Test first-time onboarding with no assessments taken yet.</p>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btn-cancel-reset">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- Application Logic -->
+  <script src="script.js"></script>
+</body>
+</html>
