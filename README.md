@@ -2,7 +2,8 @@
 ### Career Readiness & Skill Gap Analysis Platform
 
 <p align="center">
-  <b>Prepare Today. Get Placed Tomorrow!</b>
+  <b>PlacementPath is a web application designed to help B.Tech students prepare for campus placements by evaluating their skills and identifying areas for improvement.
+    Prepare Today. Get Placed Tomorrow!</b>
 </p>
 
 ---
