@@ -41,9 +41,33 @@ It helps students understand their career readiness through skill assessments, s
 
 To help students identify their strengths, improve their weaknesses, and become better prepared for campus placement opportunities.
 
-## 📸 Screenshots
 
-Screenshots coming soon!
+## 📸 Project Screenshots
+
+### 1. Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### 2. Student Profile
+![Student Profile](screenshots/profile.png)
+
+### 3. Placement Assessments
+![Assessments](screenshots/assessments.png)
+
+### 4. Skill Gap Analysis
+![Skill Gap Analysis](screenshots/skill-gap.png)
+
+### 5. Weekly Study Planner
+![Study Planner](screenshots/study-planner.png)
+
+### 6. Campus Job Roles
+![Job Roles](screenshots/job-roles.png)
+
+### 7. Analytics & Progress
+![Analytics](screenshots/analytics.png)
+
+### 8. Explainability Rules
+![Explainability Rules](screenshots/explainability.png)
+
 
 ## 🚀 Live Demo
 
